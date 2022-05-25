@@ -10,6 +10,8 @@ import { HomeComponent } from './components/home/home.component';
 import {FontAwesomeModule, FaIconLibrary} from "@fortawesome/angular-fontawesome";
 //import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {fas} from '@fortawesome/free-solid-svg-icons';
+import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import {fas} from '@fortawesome/free-solid-svg-icons';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    SweetAlert2Module,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

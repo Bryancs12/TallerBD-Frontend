@@ -11,7 +11,7 @@
     <div class="card-body">
       <table class="table table-hover table-sm">
         <thead>
-        <tr>
+        <tr >
           <th scope="col">Id</th>
           <th scope="col">Nombre</th>
           <th scope="col">Apellido1</th>
@@ -20,68 +20,32 @@
           <th scope="col">celular</th>
           <th scope="col">Correo</th>
           <th [colSpan]="2" class="text-center">
-            <button class="btn btn-primary btn-sm" (click)="onNew()">
+            <button class="btn btn-primary btn-sm"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    (click)="onNew()">
               <fa-icon [icon]="['fas','plus']"></fa-icon>
             </button>
           </th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td>Bryan</td>
-          <td>Cortes</td>
-          <td>Sanchez</td>
-          <td>123456</td>
-          <td>1111111</td>
-          <td>bryan@gmail.com</td>
+        <tr *ngFor="let item of clientes">
+          <th scope="row">{{item.idCliente}}</th>
+          <td>{{item.nombre}}</td>
+          <td>{{item.apellido1}}</td>
+          <td>{{item.apellido2}}</td>
+          <td>{{item.telefono}}</td>
+          <td>{{item.celular}}</td>
+          <td>{{item.correo}}</td>
           <td class="text-center">
-            <button class="btn btn-secondary btn-sm" (click)="onEdit()">
+            <button class="btn btn-secondary btn-sm"
+                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    (click)="onEdit(item.id)">
               <fa-icon [icon]="['fas','pen-to-square']"></fa-icon>
             </button>
           </td>
           <td class="text-center">
-            <button class="btn btn-danger btn-sm" (click)="onDelete()">
-              <fa-icon [icon]="['fas','trash-can']"></fa-icon>
-            </button>
-          </td>
-        </tr>
-
-        <tr>
-          <th scope="row">2</th>
-          <td>Bryan1</td>
-          <td>Cortes1</td>
-          <td>Sanchez1</td>
-          <td>123456</td>
-          <td>1111111</td>
-          <td>bryan1@gmail.com</td>
-          <td class="text-center">
-            <button class="btn btn-secondary btn-sm">
-              <fa-icon [icon]="['fas','pen-to-square']"></fa-icon>
-            </button>
-          </td>
-          <td class="text-center">
-            <button class="btn btn-danger btn-sm">
-              <fa-icon [icon]="['fas','trash-can']"></fa-icon>
-            </button>
-          </td>
-        </tr>
-
-        <tr>
-          <th scope="row">3</th>
-          <td>Bryan2</td>
-          <td>Cortes2</td>
-          <td>Sanchez2</td>
-          <td>123456</td>
-          <td>1111111</td>
-          <td>bryan2@gmail.com</td>
-          <td class="text-center">
-            <button class="btn btn-secondary btn-sm">
-              <fa-icon [icon]="['fas','pen-to-square']"></fa-icon>
-            </button>
-          </td>
-          <td class="text-center">
-            <button class="btn btn-danger btn-sm">
+            <button class="btn btn-danger btn-sm" (click)="onDelete(item.id, item.nombre + ' ' + item.apellido1)">
               <fa-icon [icon]="['fas','trash-can']"></fa-icon>
             </button>
           </td>
@@ -99,15 +63,39 @@
         <fa-icon [icon]="['fas','filter']"></fa-icon> Filtrar
       </button>
 
-      <button class="btn btn-outline-success btn-sm me-2">
+      <button class="btn btn-outline-success btn-sm me-2" (click)="onPrint()">
         <fa-icon [icon]="['fas','print']"></fa-icon> Imprimir
       </button>
 
-      <button class="btn btn-outline-danger btn-sm">
+      <button class="btn btn-outline-danger btn-sm" (click)="onClose()">
         <fa-icon [icon]="['fas','power-off']"></fa-icon> Cerrar
       </button>
 
     </div>
   </div>
 
+</div>
+
+
+          <!-- Modal/  ventana del formulario -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">{{titulo}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="onSave()">
+          <fa-icon [icon]="['fas','save']"></fa-icon> Guardar
+        </button>
+        <button type="button" class="btn btn-outline-danger">
+          <fa-icon [icon]="['fas','rectangle-xmark']"></fa-icon> Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
