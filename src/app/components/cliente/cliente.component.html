@@ -86,10 +86,140 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        ...
+
+      <!-- Form/  ventana del formulario -->
+      <form id="frmCliente"[formGroup]="frmCliente" (ngSubmit)="onSave()">
+
+        <div class="row mb-2">
+          <label for="idCliente" class="col-sm-3 col-form-label">id Cliente</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" id="idCliente"
+                   placeholder="Ingrese el id del Cliente" formControlName="idCliente"
+            >
+            <div class="alert alert-danger" *ngIf="E['idCliente'].invalid && E['idCliente'].touched ">
+              <div *ngIf="E['idCliente'].errors!['required']">El id cliente es obligatorio</div>
+              <div *ngIf="E['idCliente'].errors!['maxlength']">El id debe tener un maximo de 15 numeros</div>
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="row mb-2">
+          <label for="nombre" class="col-sm-3 col-form-label">Nombre</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" id="Nombre"
+                   placeholder="Ingrese su nombre" formControlName="nombre"
+            >
+            <div class="alert alert-danger" *ngIf="E['nombre'].invalid && E['nombre'].touched ">
+              <div *ngIf="E['nombre'].errors!['required']">El nombre es obligatorio</div>
+              <div *ngIf="E['nombre'].errors!['maxlength']">El nombre debe tener un maximo de 30</div>
+              <div *ngIf="E['nombre'].errors!['minlength']">El nombre debe tener un minimo de 2</div>
+              <div *ngIf="E['nombre'].errors!['pattern']">El nombre no es valido</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label for="apellido1" class="col-sm-3 col-form-label">Apellido 1</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" id="apellido1"
+                   placeholder="ingrese el apellido 1" formControlName="apellido1"
+            >
+            <div class="alert alert-danger" *ngIf="E['apellido1'].invalid && E['apellido1'].touched ">
+              <div *ngIf="E['apellido1'].errors!['required']">El apellido es obligatorio</div>
+              <div *ngIf="E['apellido1'].errors!['maxlength']">El apellido debe tener un maximo de 15</div>
+              <div *ngIf="E['apellido1'].errors!['minlength']">El apellido debe tener un minimo de 2</div>
+              <div *ngIf="E['apellido1'].errors!['pattern']">El apellido no es valido</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label for="apellido2" class="col-sm-3 col-form-label">Apellido 2</label>
+          <div class="col-sm-9">
+            <input type="text" class="form-control" id="apellido2"
+                   placeholder="ingrese el apellido 2" formControlName="apellido2"
+            >
+            <div class="alert alert-danger" *ngIf="E['apellido2'].invalid && E['apellido2'].touched ">
+              <div *ngIf="E['apellido2'].errors!['required']">El apellido es obligatorio</div>
+              <div *ngIf="E['apellido2'].errors!['maxlength']">El apellido debe tener un maximo de 15</div>
+              <div *ngIf="E['apellido2'].errors!['minlength']">El apellido debe tener un minimo de 2</div>
+              <div *ngIf="E['apellido2'].errors!['pattern']">El apellido no es valido</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label for="telefono" class="col-sm-3 col-form-label">Telefono</label>
+          <div class="col-sm-9">
+            <div class="row">
+              <div class="col-sm-6">
+                <input type="tel" class="form-control" id="telefono"
+                       placeholder="ingrese el telefono" formControlName="telefono"
+                >
+                <div class="alert alert-danger" *ngIf="E['telefono'].invalid && E['telefono'].touched ">
+                  <div *ngIf="E['telefono'].errors!['pattern']">El telefono no es valido</div>
+                </div>
+
+              </div>
+
+              <div class="col-sm-6">
+                <input type="tel" class="form-control" id="celular"
+                       placeholder="ingrese el celular" formControlName="celular"
+                >
+                <div class="alert alert-danger" *ngIf="E['celular'].invalid && E['celular'].touched ">
+                  <div *ngIf="E['celular'].errors!['required']">El celular es requerido</div>
+                  <div *ngIf="E['celular'].errors!['pattern']">El celular no es valido</div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+
+
+        <div class="row mb-2">
+          <label for="correo" class="col-sm-3 col-form-label">Correo</label>
+          <div class="col-sm-9">
+            <input type="email" class="form-control" id="correo"
+                   placeholder="ingrese el correo" formControlName="correo"
+            >
+            <div class="alert alert-danger" *ngIf="E['correo'].invalid && E['correo'].touched ">
+              <div *ngIf="E['correo'].errors!['required']">El correo es requerido</div>
+              <div *ngIf="E['correo'].errors!['email']">El correo no es valido</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mb-2">
+          <label for="direccion" class="col-sm-3 col-form-label">Direccion</label>
+          <div class="col-sm-9">
+            <textarea class="form-control" id="direccion"
+                      placeholder="ingrese la direccion" formControlName="direccion"
+            >
+
+            </textarea>
+            <div class="alert alert-danger" *ngIf="E['direccion'].invalid && E['direccion'].touched ">
+              <div *ngIf="E['direccion'].errors!['required']">La direccion es requerido</div>
+              <div *ngIf="E['direccion'].errors!['minlength']">La direccion debe tener minimo 5</div>
+            </div>
+          </div>
+        </div>
+
+      </form>
+
+        Valido: {{this.frmCliente.valid}} <br>
+        Estado: {{this.frmCliente.status}}
+
+
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal" (click)="onSave()">
+        <button type="submit" class="btn btn-outline-primary" data-bs-dismiss="modal" form="frmCliente"
+                [disabled]="frmCliente.invalid"
+        >
           <fa-icon [icon]="['fas','save']"></fa-icon> Guardar
         </button>
         <button type="button" class="btn btn-outline-danger">
@@ -99,3 +229,5 @@
     </div>
   </div>
 </div>
+
+

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable, retry, throwError, catchError} from "rxjs";
 import {Cliente} from "../models/cliente.model";
-
+import {environment} from "../../../environments/environment";
 
 
 @Injectable({
@@ -10,7 +10,7 @@ import {Cliente} from "../models/cliente.model";
 })
 export class ClienteService {
 
-  SRV : string = 'http://tallerbd';
+  SRV : string = environment.SRV;
 
   constructor(private http : HttpClient) {
 
@@ -23,6 +23,8 @@ export class ClienteService {
 
   }
 
+
+
   filter(parametros : any, pag: number, lim: number) : Observable<Cliente>{
     let params = new HttpParams;
     for (const prop in parametros){
@@ -33,6 +35,29 @@ export class ClienteService {
     return  this.http.get<Cliente>(`${this.SRV}/filtro/cliente/${pag}/${lim}`, {params:params})
       .pipe(retry(1), catchError(this.handleError));
   }
+
+  save(data : Cliente, id? : number) : Observable<any>{
+    if(id){
+      //modificar
+      return this.http.put<Cliente>(`${this.SRV}/cliente/${id}`, data, this.httpOptions)
+        .pipe(retry(1),catchError(this.handleError));
+    } else{
+      //crear nuevo
+      return this.http.post<Cliente>(`${this.SRV}/cliente/`, data, this.httpOptions)
+        .pipe(retry(1),catchError(this.handleError));
+    }
+  }
+
+  search(id : any) : Observable<Cliente>{
+    return this.http.get<Cliente>(`${this.SRV}/cliente/${id}`)
+      .pipe(retry(1),catchError(this.handleError));
+  }
+
+  delete(id : any){
+    return this.http.delete<Cliente>(`${this.SRV}/cliente/${id}`)
+      .pipe(retry(1),catchError(this.handleError));
+  }
+
   private handleError(error:any){
     return throwError(()=>{
       return error.status
