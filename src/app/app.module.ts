@@ -11,9 +11,12 @@ import {FontAwesomeModule, FaIconLibrary} from "@fortawesome/angular-fontawesome
 //import {faPlus} from '@fortawesome/free-solid-svg-icons';
 import {fas} from '@fortawesome/free-solid-svg-icons';
 import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { LoginComponent } from './components/login/login.component';
+import { TecnicoComponent } from './components/tecnico/tecnico.component';
+import {JwtInterceptor} from "./shared/helpers/jwt.interceptor";
+import {RefreshTokenInterceptor} from "./shared/helpers/refresh-token.interceptor";
 
 @NgModule({
   declarations: [
@@ -22,7 +25,8 @@ import { LoginComponent } from './components/login/login.component';
     NavBarComponent,
     ArtefactoComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    TecnicoComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +37,10 @@ import { LoginComponent } from './components/login/login.component';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [
+    {provide : HTTP_INTERCEPTORS, useClass : JwtInterceptor, multi : true},
+    {provide : HTTP_INTERCEPTORS, useClass : RefreshTokenInterceptor, multi : true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {

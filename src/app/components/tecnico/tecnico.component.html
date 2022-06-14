@@ -1,7 +1,7 @@
 <div class="container">
   <div class="card">
     <div class="card-header text-center">
-      <h4>Catálogo Clientes</h4>
+      <h4>Catálogo Tecnicos</h4>
     </div>
     <div class="card-body">
       <table class="table table-striped table-hover table-sm">
@@ -17,15 +17,15 @@
           <th [colSpan]="2" class="text-center">
             <button class="btn btn-primary btn-sm"
                     data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                    (click)="onNew();">
+                    (click)="onNuevo();">
               <fa-icon [icon]="['fas','plus']"></fa-icon>
             </button>
           </th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let item of clientes">
-          <th scope="row">{{item.idCliente}}</th>
+        <tr *ngFor="let item of tecnicos">
+          <th scope="row">{{item.idTecnico}}</th>
           <td>{{item.nombre}}</td>
           <td>{{item.apellido1}}</td>
           <td>{{item.apellido2}}</td>
@@ -35,13 +35,13 @@
           <td class="text-center">
             <button class="btn btn-sm btn-warning"
                     data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                    (click)="onEdit(item.id);">
+                    (click)="onEditar(item.id);">
               <fa-icon [icon]="['fas','pencil']"></fa-icon>
             </button>
           </td>
           <td class="text-center">
             <button class="btn btn-sm btn-danger"
-                    (click)="onDelete(item.id, item.nombre+' '+item.apellido1+' '+item.apellido2);">
+                    (click)="onEliminar(item.id, item.nombre+' '+item.apellido1+' '+item.apellido2);">
               <fa-icon [icon]="['fas','trash-can']"></fa-icon>
             </button>
           </td>
@@ -51,17 +51,17 @@
     </div>
     <div class="card-footer text-end">
       <div>
-        <button class="btn btn-sm btn-outline-primary me-2"(click)="onFilter();">
+        <button class="btn btn-sm btn-outline-primary me-2"(click)="onFiltrar();">
           <fa-icon [icon]="['fas','filter']"></fa-icon>
           Filtrar
         </button>
         <button class="btn btn-sm btn-outline-success me-2"
-                (click)="onPrint();">
+                (click)="onImprimir();">
           <fa-icon [icon]="['fas','print']"></fa-icon>
           Imprimir
         </button>
         <button class="btn btn-sm btn-outline-danger"
-                (click)="onClose();">
+                (click)="onCerrar();">
           <fa-icon [icon]="['fas','power-off']"></fa-icon>
           Cerrar
         </button>
@@ -78,14 +78,14 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="frmCliente" [formGroup]="frmCliente" (ngSubmit)="onSave();">
+          <form id="frmTecnico" [formGroup]="frmTecnico" (ngSubmit)="onGuardar();">
             <div class="row mb-1">
-              <label for="idCliente" class="col-sm-3 col-form-label">Id Cliente</label>
+              <label for="idTecnico" class="col-sm-3 col-form-label">Id Tecnico</label>
               <div class="col-sm-9">
-                <input type="text" formControlName="idCliente" class="form-control" id="idCliente" placeholder="Id Cliente">
-                <div class="alert alert-danger" *ngIf="E['idCliente'].invalid && E['idCliente'].touched">
-                  <div *ngIf="E['idCliente'].errors!['required']">El id Cliente es obligatorio</div>
-                  <div *ngIf="E['idCliente'].errors!['maxlength']">El id debe tener 15 caracteres maximo</div>
+                <input type="text" formControlName="idTecnico" class="form-control" id="idTecnico" placeholder="Id Tecnico">
+                <div class="alert alert-danger" *ngIf="E['idTecnico'].invalid && E['idTecnico'].touched">
+                  <div *ngIf="E['idTecnico'].errors!['required']">El id Tecnico es obligatorio</div>
+                  <div *ngIf="E['idTecnico'].errors!['maxlength']">El id debe tener 15 caracteres maximo</div>
                 </div>
               </div>
             </div>
@@ -166,8 +166,8 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-outline-primary" form="frmCliente"
-                  [disabled]="frmCliente.invalid">
+          <button type="submit" class="btn btn-outline-primary" form="frmTecnico"
+                  [disabled]="frmTecnico.invalid">
             <fa-icon [icon]="['fas','save']"></fa-icon>
             Guardar
           </button>

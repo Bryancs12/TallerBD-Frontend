@@ -6,6 +6,7 @@ import {environment} from "../../../environments/environment";
 import {Token} from "../models/token";
 import {TokenService} from "./token.service";
 import {User} from "../models/user";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +14,9 @@ import {User} from "../models/user";
 export class AuthService {
 
   private usrActualSubject = new BehaviorSubject<User>(new User());
-  private usrActual = this.usrActualSubject.asObservable();
+  public usrActual = this.usrActualSubject.asObservable();
 
-  constructor(private http : HttpClient, private srvToken : TokenService) { }
+  constructor(private http : HttpClient, private srvToken : TokenService, private router : Router) { }
 
   public login(user : { usr: '', passw : '' }) : Observable<any>{
     return this.http.post<Token>(`${environment.SRV}/auth/login`, user)
@@ -24,6 +25,7 @@ export class AuthService {
         tap(tokens =>{
           console.log(tokens)
           this.doLogin(tokens)
+          this.router.navigate(['/home'])
         }),
         map(() => true),
         catchError(
@@ -36,21 +38,29 @@ export class AuthService {
     return this.usrActualSubject.value
   }
 
+  public loggout(){
+    this.http.patch(`${environment.SRV}/auth/logout`, {
+      "idUsuario" : this.valueUrsActual.usr
+    }).subscribe();
+    this.doLogout()
+  }
+
   private doLogin(tokens : Token) : void{
     this.srvToken.setTokens(tokens);
     this.usrActualSubject.next(this.getActualUser());
   }
 
   public isLogged() : boolean{
-    return !!this.srvToken.token;
+    return !!this.srvToken.token && !this.srvToken.jwtTokenExp();
   }
 
-  public doLogout(){
+  private doLogout(){
     if (this.srvToken.token){
       this.srvToken.deleteTokens();
     }
     this.usrActualSubject.next(this.getActualUser())
   }
+
 
   private getActualUser() : User{
     if(!this.srvToken.token){
@@ -58,6 +68,15 @@ export class AuthService {
     }
     const tokenD = this.srvToken.decodeToken();
     return {usr: tokenD.sub, rol:tokenD.rol}
+  }
+
+  public verifyRefresh () : boolean {
+    if(this.isLogged() && this.srvToken.timeExpToken() <= 20){
+      this.srvToken.refreshTokens();
+      return true;
+    }else{
+      return false
+    }
   }
 
 }

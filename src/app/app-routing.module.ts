@@ -6,6 +6,8 @@ import {ArtefactoComponent} from "./components/artefacto/artefacto.component";
 import {LoginComponent} from "./components/login/login.component";
 import {AuthGuard} from "./shared/guards/auth.guard";
 import {LoginGuard} from "./shared/guards/login.guard";
+import {TecnicoComponent} from "./components/tecnico/tecnico.component";
+
 
 const routes: Routes = [
 
@@ -23,6 +25,9 @@ const routes: Routes = [
   },
   {
     path : '', pathMatch : 'full', redirectTo : 'login'
+  },
+  {
+    path : 'tecnico', component: TecnicoComponent, canActivate : [AuthGuard]
   }
 ];
 

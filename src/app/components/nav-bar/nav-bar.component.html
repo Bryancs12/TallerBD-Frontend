@@ -19,6 +19,7 @@
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" [routerLink]="['/cliente']">Cliente</a></li>
             <li><a class="dropdown-item" [routerLink]="['/artefacto']">Artefacto </a></li>
+            <li><a class="dropdown-item" [routerLink]="['/tecnico']">Tecnico</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="#">Something else here</a></li>
           </ul>
@@ -27,6 +28,18 @@
           <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
         </li>
       </ul>
+
+      <!-- Default dropstart button -->
+      <div class="btn-group dropstart" *ngIf="usuario">
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+          <fa-icon [icon]="['fas','user']"></fa-icon> {{usuario}}
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#" (click)="onLogout()">Salir </a></li>
+          <li><a class="dropdown-item" href="#">Cambiar contrasena</a></li>
+
+        </ul>
+      </div>
 
     </div>
   </div>

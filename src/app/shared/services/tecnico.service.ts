@@ -1,14 +1,13 @@
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {Observable, retry, throwError, catchError} from "rxjs";
-import {Cliente} from "../models/cliente.model";
-import {environment} from "../../../environments/environment";
-
+import { catchError, Observable, retry, throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import {Tecnico} from "../models/tecnico.model";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ClienteService {
+export class TecnicoService {
   SRV : string = environment.SRV;
 
   constructor(
@@ -20,35 +19,33 @@ export class ClienteService {
     })
   }
 
-
-  filter(parametros: any, pag: number, lim :number) : Observable<Cliente>{
+  filtrar(parametros: any, pag: number, lim :number) : Observable<Tecnico>{
     let params = new HttpParams;
     for (const prop in parametros){
       if(prop){
         params = params.append(prop, parametros[prop])
       }
     }
-    return this.http.get<Cliente>(`${this.SRV}/filtro/cliente/${pag}/${lim}`, {params:params})
+    return this.http.get<Tecnico>(`${this.SRV}/tecnico/filtro/${pag}/${lim}`, {params:params})
       .pipe(retry(1),catchError(this.handleError));
   }
-  search(id: any) : Observable <Cliente>{
-    return this.http.get<Cliente>(`${this.SRV}/cliente/${id}`)
+  buscar(id: any) : Observable <Tecnico>{
+    return this.http.get<Tecnico>(`${this.SRV}/tecnico/${id}`)
       .pipe(retry(1), catchError(this.handleError));
   }
-  save(datos : Cliente, id? : number) : Observable<any>{
+  guardar(datos : Tecnico, id? : number) : Observable<any>{
     if(id){
       //modificar
-      return this.http.put<Cliente>(`${this.SRV}/cliente/${id}`,datos, this.httpOptions)
+      return this.http.put<Tecnico>(`${this.SRV}/tecnico/${id}`,datos, this.httpOptions)
         .pipe(retry(1), catchError(this.handleError));
     }else{
       //crear nuevo
-      return this.http.post<Cliente>(`${this.SRV}/cliente/`,datos, this.httpOptions)
+      return this.http.post<Tecnico>(`${this.SRV}/tecnico/`,datos, this.httpOptions)
         .pipe(retry(1), catchError(this.handleError));
     }
   }
-
-  delete(id : any){
-    return this.http.delete<Cliente>(`${this.SRV}/cliente/${id}`)
+  eliminar(id : any){
+    return this.http.delete<Tecnico>(`${this.SRV}/tecnico/${id}`)
       .pipe(retry(1), catchError(this.handleError));
   }
   private handleError(error:any){

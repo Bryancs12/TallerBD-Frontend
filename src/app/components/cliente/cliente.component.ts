@@ -5,6 +5,7 @@ import {Cliente} from "../../shared/models/cliente.model";
 import {FormBuilder, FormGroup, Validator, Validators} from "@angular/forms";
 import {Observable} from "rxjs";
 import {AuthService} from "../../shared/services/auth.service";
+import {TokenService} from "../../shared/services/token.service";
 
 @Component({
   selector: 'app-cliente',
@@ -18,7 +19,8 @@ export class ClienteComponent implements OnInit {
   filtro : any;
   frmCliente : FormGroup;
 
-  constructor(private srvCliente: ClienteService, private fb : FormBuilder, private srvAuth : AuthService) {
+  constructor(private srvCliente: ClienteService, private fb : FormBuilder,
+              private srvAuth : AuthService, private srvToken : TokenService) {
     this.frmCliente = this.fb.group({
       id : [''],
       idCliente : ['', [Validators.required, Validators.maxLength(15)]],
@@ -76,87 +78,71 @@ export class ClienteComponent implements OnInit {
     this.titulo = 'Nuevo cliente';
     this.frmCliente.reset();
   }
-
-  onSave2(){
-    console.log(this.frmCliente)
-  }
-
-  onSave() {
-    console.log(this.frmCliente.value);
-    const data = new Cliente(this.frmCliente.value);
+  onSave(){
+    const datos = new Cliente(this.frmCliente.value);
     let llamada : Observable<any>;
     let texto : string = '';
-
-    if(data.id){
-      const id = data.id;
-      delete data.id;
-      delete data.fechaIngreso;
-      llamada = this.srvCliente.save(data,id);
-      texto = 'Cambios realizados!'
+    if(datos.id){
+      const id = datos.id;
+      delete datos.id;
+      delete datos.fechaIngreso;
+      llamada = this.srvCliente.save(datos, id);
+      texto = 'Cambios Guardados de forma correcta!';
     }else{
-      delete data.id;
-      llamada = this.srvCliente.save(data);
-      texto = 'Creado de forma exitosa!';
+      delete datos.id;
+      llamada = this.srvCliente.save(datos);
+      texto = 'Creado de forma correcta!';
     }
 
-    llamada.subscribe({
-      complete : () =>{
-        this.filter();
-        Swal.fire({
-          position: 'center',
-          icon: 'success',
-          title: texto,
-          showConfirmButton: false,
-          timer: 3000
-        })
-      },
-      error : (e) =>{
-
-        switch (e) {
-          case 404:
-
-            Swal.fire({
-              position: 'center',
-              icon: 'error',
-              title: 'id cliente no encontrado',
-              showConfirmButton: false,
-              showCancelButton: true,
-              cancelButtonColor : '#d33',
-              cancelButtonText : 'Cerrar'
-            })
-
-            break;
-
-          case 409:
-
-            Swal.fire({
-              position: 'center',
-              icon: 'error',
-              title: 'id cliente ya existe',
-              showConfirmButton: false,
-              showCancelButton: true,
-              cancelButtonColor : '#d33',
-              cancelButtonText : 'Cerrar'
-            })
-
-            break;
+    llamada
+      .subscribe({
+        complete : () => {
+          this.filter();
+          Swal.fire({
+            icon: 'success',
+            title: texto,
+            showConfirmButton: false,
+            timer: 1500
+          })
+        },
+        error: (e) => {
+          switch(e){
+            case 404:
+              Swal.fire({
+                title: "Id Cliente no encontrado",
+                icon: 'error',
+                showCancelButton : true,
+                showConfirmButton : false,
+                cancelButtonColor : '#d33',
+                cancelButtonText : 'Cerrar'
+              });
+              break;
+            case 409:
+              Swal.fire({
+                title: "Id Cliente ya existe",
+                icon: 'error',
+                showCancelButton : true,
+                showConfirmButton : false,
+                cancelButtonColor : '#d33',
+                cancelButtonText : 'Cerrar'
+              });
+              break;
+          }
         }
-      }
-    })
-
-
-
-  }
+      })
+}
 
   onEdit(id: any) {
-    this.titulo = 'Editar cliente';
-    this.srvCliente.search(id).subscribe({
-      next : (data) =>{
-        console.log(data);
-        delete data.fechaIngreso;
-        this.frmCliente.setValue(data);
-      }
-    })
+    this.titulo = 'Modificar Cliente';
+    this.srvCliente.search(id)
+      .subscribe({
+        next: (data) => {
+          console.log(data);
+          delete data.fechaIngreso;
+          this.frmCliente.setValue(data);
+
+        }
+      })
   }
 
   onDelete(id: any, nombre: string) {
@@ -176,38 +162,33 @@ export class ClienteComponent implements OnInit {
           complete : () =>{
             this.filter();
             Swal.fire(
-              'Eliminado!',
-              'Tu archivo ha sido eliminado.',
+              'Eliminado',
+              '',
               'success'
             )
           },
-          error : (err) =>{
-            switch (err) {
+          error: (error) => {
+            switch (error) {
               case 404:
                 Swal.fire({
-                  position: 'center',
+                  title: "id Cliente no Encontrado",
                   icon: 'info',
-                  title: 'id cliente no encontrado',
-                  showConfirmButton: false,
                   showCancelButton: true,
-                  cancelButtonColor : '#d33',
-                  cancelButtonText : 'Cerrar'
+                  showConfirmButton: false,
+                  cancelButtonColor: '#d33',
+                  cancelButtonText: 'Cerrar'
                 })
                 break;
-
               case 412:
-
                 Swal.fire({
-                  position: 'center',
+                  title: "No se puede eliminar",
+                  text: 'El cliente tiene artefacto relacionado',
                   icon: 'info',
-                  title: 'No se puede eliminar',
-                  text: 'El cliente tiene un artefacto relacinonado',
-                  showConfirmButton: false,
                   showCancelButton: true,
-                  cancelButtonColor : '#d33',
-                  cancelButtonText : 'Cerrar'
+                  showConfirmButton: false,
+                  cancelButtonColor: '#d33',
+                  cancelButtonText: 'Cerrar'
                 })
-
                 break;
             }
           }
@@ -229,14 +210,14 @@ export class ClienteComponent implements OnInit {
     alert('close test');
   }
 
-  private filter(): void {
-    this.srvCliente.filter(
-      this.filtro, 1, 10).subscribe(
-      data => {
-        this.clientes = Object(data);
-        console.log(data)
-      }
-    )
+  private filter(): void{
+    this.srvCliente.filter(this.filtro, 1, 10)
+      .subscribe(
+        data => {
+          this.clientes = Object(data)
+          console.log(data)
+        }
+      )
   }
 
 
@@ -249,6 +230,7 @@ export class ClienteComponent implements OnInit {
     };
     this.filter();
     console.log(this.srvAuth.valueUrsActual)
+    console.log(this.srvToken.timeExpToken())
   }
 }
 

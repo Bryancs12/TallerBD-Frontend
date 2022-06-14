@@ -1,6 +1,6 @@
-export class Cliente {
+export class Tecnico {
   id? :number;
-  idCliente :string;
+  idTecnico :string;
   nombre :string;
   apellido1 :string;
   apellido2 :string;
@@ -9,11 +9,11 @@ export class Cliente {
   direccion :string;
   correo :string;
   fechaIngreso? :Date;
-  constructor(c? : Cliente){
+  constructor(c? : Tecnico){
     if(c?.id !== undefined){
       this.id = c?.id;
     }
-    this.idCliente = c != undefined ? c?.idCliente : '';
+    this.idTecnico = c != undefined ? c?.idTecnico : '';
     this.nombre= c != undefined ? c?.nombre : '';
     this.apellido1 = c != undefined ? c?.apellido1 : '';
     this.apellido2 = c != undefined ? c?.apellido2 : '';
