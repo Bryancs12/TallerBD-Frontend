@@ -6,6 +6,7 @@ import {FormBuilder, FormGroup, Validator, Validators} from "@angular/forms";
 import {Observable} from "rxjs";
 import {AuthService} from "../../shared/services/auth.service";
 import {TokenService} from "../../shared/services/token.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-cliente',
@@ -20,7 +21,8 @@ export class ClienteComponent implements OnInit {
   frmCliente : FormGroup;
 
   constructor(private srvCliente: ClienteService, private fb : FormBuilder,
-              private srvAuth : AuthService, private srvToken : TokenService) {
+              //private srvAuth : AuthService, private srvToken : TokenService,
+              private router : Router) {
     this.frmCliente = this.fb.group({
       id : [''],
       idCliente : ['', [Validators.required, Validators.maxLength(15)]],
@@ -207,7 +209,7 @@ export class ClienteComponent implements OnInit {
   }
 
   onClose() {
-    alert('close test');
+    this.router.navigate(['/home']);
   }
 
   private filter(): void{
@@ -229,8 +231,8 @@ export class ClienteComponent implements OnInit {
       apellido2 : ''
     };
     this.filter();
-    console.log(this.srvAuth.valueUrsActual)
-    console.log(this.srvToken.timeExpToken())
+    // console.log(this.srvAuth.valueUrsActual)
+    // console.log(this.srvToken.timeExpToken())
   }
 }
 

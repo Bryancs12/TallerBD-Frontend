@@ -7,6 +7,9 @@ import {LoginComponent} from "./components/login/login.component";
 import {AuthGuard} from "./shared/guards/auth.guard";
 import {LoginGuard} from "./shared/guards/login.guard";
 import {TecnicoComponent} from "./components/tecnico/tecnico.component";
+import {Role} from "./shared/models/role.model";
+import {Error403Component} from "./components/error403/error403.component";
+import {ChangePasswComponent} from "./components/change-passw/change-passw.component";
 
 
 const routes: Routes = [
@@ -15,7 +18,8 @@ const routes: Routes = [
     path : 'home', component : HomeComponent
   },
   {
-    path : 'cliente', component: ClienteComponent, canActivate : [AuthGuard]
+    path : 'cliente', component: ClienteComponent, canActivate : [AuthGuard],
+    data: {roles:[Role.Admin, Role.Oficinista]}
   },
   {
     path : 'artefacto', component: ArtefactoComponent
@@ -28,7 +32,13 @@ const routes: Routes = [
   },
   {
     path : 'tecnico', component: TecnicoComponent, canActivate : [AuthGuard]
-  }
+  },
+  {
+    path : 'error403', component: Error403Component
+  },
+  {
+    path : 'passw', component: ChangePasswComponent, canActivate : [AuthGuard]
+  },
 ];
 
 @NgModule({

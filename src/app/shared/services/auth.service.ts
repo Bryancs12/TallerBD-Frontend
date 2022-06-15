@@ -67,7 +67,7 @@ export class AuthService {
       return new User();
     }
     const tokenD = this.srvToken.decodeToken();
-    return {usr: tokenD.sub, rol:tokenD.rol}
+    return {usr: tokenD.sub, rol:tokenD.rol, nom:tokenD.nom}
   }
 
   public verifyRefresh () : boolean {

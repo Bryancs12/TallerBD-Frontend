@@ -17,6 +17,8 @@ import { LoginComponent } from './components/login/login.component';
 import { TecnicoComponent } from './components/tecnico/tecnico.component';
 import {JwtInterceptor} from "./shared/helpers/jwt.interceptor";
 import {RefreshTokenInterceptor} from "./shared/helpers/refresh-token.interceptor";
+import { Error403Component } from './components/error403/error403.component';
+import { ChangePasswComponent } from './components/change-passw/change-passw.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import {RefreshTokenInterceptor} from "./shared/helpers/refresh-token.intercepto
     ArtefactoComponent,
     HomeComponent,
     LoginComponent,
-    TecnicoComponent
+    TecnicoComponent,
+    Error403Component,
+    ChangePasswComponent
   ],
   imports: [
     BrowserModule,

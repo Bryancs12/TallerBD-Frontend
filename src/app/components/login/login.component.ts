@@ -13,8 +13,8 @@ export class LoginComponent implements OnInit {
 
   constructor(private  fb : FormBuilder, private  authSrv : AuthService) {
     this.frmLogin = this.fb.group({
-      idUsuario : ['C12345', Validators.required],
-      passw : ['C12345', Validators.required]
+      idUsuario : ['C9999', Validators.required],
+      passw : ['C9999', Validators.required]
     })
   }
 

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, HostListener} from '@angular/core';
+import {AuthService} from "./shared/services/auth.service";
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'frontend-app';
+  title = 'Taller';
+
+  constructor(private authSrv : AuthService){
+  // @HostListener("window:beforeunload", ["$event"]) unloadHandler(event : Event){
+  //   this.authSrv.loggout()
+  //   }
+  }
+
 }
+
+
