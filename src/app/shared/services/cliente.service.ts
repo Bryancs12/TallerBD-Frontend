@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {Observable, retry, throwError, catchError} from "rxjs";
+import {Observable, retry, throwError, catchError, of} from "rxjs";
 import {Cliente} from "../models/cliente.model";
 import {environment} from "../../../environments/environment";
 
@@ -35,22 +35,29 @@ export class ClienteService {
     return this.http.get<Cliente>(`${this.SRV}/cliente/${id}`)
       .pipe(retry(1), catchError(this.handleError));
   }
-  save(datos : Cliente, id? : number) : Observable<any>{
-    if(id){
+  save(datos : Cliente, id? : number) : Observable<any> {
+    if (id) {
       //modificar
-      return this.http.put<Cliente>(`${this.SRV}/cliente/${id}`,datos, this.httpOptions)
+      return this.http.put<Cliente>(`${this.SRV}/cliente/${id}`, datos, this.httpOptions)
         .pipe(retry(1), catchError(this.handleError));
-    }else{
+    } else {
       //crear nuevo
-      return this.http.post<Cliente>(`${this.SRV}/cliente/`,datos, this.httpOptions)
-        .pipe(retry(1), catchError(this.handleError));
+      return this.http.post<Cliente>(`${this.SRV}/cliente/`, datos, this.httpOptions)
+        .pipe( catchError(error => {
+            return of(error.status)
+          })
+        )
     }
   }
 
-  delete(id : any){
+  delete(id : any) : Observable<any>{
     return this.http.delete<Cliente>(`${this.SRV}/cliente/${id}`)
-      .pipe(retry(1), catchError(this.handleError));
+      .pipe( catchError(error =>{
+        return of(error.status)
+      }));
+        //catchError(this.handleError)
   }
+
   private handleError(error:any){
     return  throwError(
       ()=>{

@@ -9,11 +9,11 @@ import {AuthService} from "./shared/services/auth.service";
 export class AppComponent {
   title = 'Taller';
 
-  constructor(private authSrv : AuthService){
-  // @HostListener("window:beforeunload", ["$event"]) unloadHandler(event : Event){
-  //   this.authSrv.loggout()
-  //   }
-  }
+  constructor(private authSrv : AuthService){ }
+
+  @HostListener("window:beforeunload", ["$event"]) unloadHandler(event : Event){
+    this.authSrv.loggout()
+    }
 
 }
 

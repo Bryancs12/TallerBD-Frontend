@@ -19,6 +19,9 @@ import {JwtInterceptor} from "./shared/helpers/jwt.interceptor";
 import {RefreshTokenInterceptor} from "./shared/helpers/refresh-token.interceptor";
 import { Error403Component } from './components/error403/error403.component';
 import { ChangePasswComponent } from './components/change-passw/change-passw.component';
+import {NgxPaginationModule} from "ngx-pagination";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { OrderModule } from 'ngx-order-pipe';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,7 @@ import { ChangePasswComponent } from './components/change-passw/change-passw.com
     LoginComponent,
     TecnicoComponent,
     Error403Component,
-    ChangePasswComponent
+    ChangePasswComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,7 +42,10 @@ import { ChangePasswComponent } from './components/change-passw/change-passw.com
     SweetAlert2Module,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgxPaginationModule,
+    BrowserAnimationsModule,
+    OrderModule,
   ],
   providers: [
     {provide : HTTP_INTERCEPTORS, useClass : JwtInterceptor, multi : true},

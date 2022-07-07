@@ -7,33 +7,49 @@
     </div>
 
     <div class="card-body">
-     <form id="frmPassw" [formGroup]="frmPassw" (ngSubmit)="onSubmit()">
+      <form id="frmPassw" [formGroup]="frmPassw" (ngSubmit)="onSubmit()">
         <div class="form-floating mb-3">
-          <input type="email" class="form-control" formControlName="idUsuario" id="idUsuario" placeholder="Id Usuario"
+          <input type="text" class="form-control" formControlName="passw" id="passw" placeholder="Contrasena actual"
           >
-          <label for="idUsuario">Id Usuario</label>
+          <label for="passw">Contrasena</label>
+          <div class="alert alert-danger"*ngIf="frmPassw.controls['passw'].invalid && frmPassw.controls['passw'].touched">
+            <div *ngIf="frmPassw.controls['passw'].errors!['required']">Debe ingresar la contrasena</div>
+            <div *ngIf="frmPassw.controls['passw'].errors!['invalid']">Contrasena actual invalida</div>
+          </div>
         </div>
 
         <div class="form-floating">
-          <input type="password" class="form-control" formControlName="passw" id="passw" placeholder="Contrasena"
+          <input type="password" class="form-control" formControlName="passwN" id="passwN" placeholder="Nueva Contrasena"
           >
-          <label for="passw">Nueva contrasena</label>
+          <label for="passwN">Nueva contrasena</label>
+            <div class="alert alert-danger"*ngIf="c.controls['passwN'].invalid && c.controls['passwN'].touched">
+              <div *ngIf="frmPassw.controls['passwN'].errors!['required']">Debe ingresar la contrasena nueva</div>
+            </div>
         </div>
 
         <div class="form-floating mt-4">
-          <input type="password" class="form-control" formControlName="passw" id="passwR" placeholder="Contrasena"
+          <input type="password" class="form-control" formControlName="passwR" id="passwR" placeholder="Contrasena"
 
           >
-          <label for="passw">Confirmar Contrasena</label>
+          <label for="passwR">Confirmar Contrasena</label>
+          <div class="alert alert-danger"*ngIf="frmPassw.controls['passwR'].invalid && frmPassw.controls['passwR'].touched">
+            <div *ngIf="frmPassw.controls['passwR'].errors!['required']">Debe repetir la contrasena nueva</div>
+          </div>
         </div>
 
+          <div class="alert alert-success" *ngIf="saved">
+            Contrasena cambiada de forma exitosa
+          </div>
 
+        <div *ngIf="c.errors?.['coincide'] && c.controls['passwR'].touched" class="alert alert-danger">
+            Las contrasenas no coinciden
+        </div>
 
       </form>
     </div>
 
     <div class="card-footer">
-      <div class="d-grid gap-2">
+      <div class="d-flex justify-content-end">
         <button class="btn btn-primary"
                 [disabled]="frmPassw.invalid"
                 type="submit"
@@ -41,6 +57,7 @@
         >
           Cambiar Contrasena
         </button>
+        <button class="btn btn-danger ms-3" (click)="onClose()">Cerrar</button>
       </div>
 
     </div>

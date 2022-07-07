@@ -12,6 +12,10 @@ export class PasswService {
 
   public resetPassw(datos : any) : Observable<any>{
     return this.http.patch<any>(`${environment.SRV}/usuario/passw/reset`, datos)
-
   }
+
+  public changePassw(datos : any) : Observable<any>{
+    return this.http.patch<any>(`${environment.SRV}/usuario/passw/change`, datos)
+  }
+
 }
