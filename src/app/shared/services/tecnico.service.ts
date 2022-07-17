@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, retry, throwError } from 'rxjs';
+import {catchError, Observable, of, retry, throwError} from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {Tecnico} from "../models/tecnico.model";
 
@@ -41,12 +41,17 @@ export class TecnicoService {
     }else{
       //crear nuevo
       return this.http.post<Tecnico>(`${this.SRV}/tecnico/`,datos, this.httpOptions)
-        .pipe(retry(1), catchError(this.handleError));
+        .pipe( catchError(error => {
+            return of(error.status)
+          })
+        )
     }
   }
   eliminar(id : any){
     return this.http.delete<Tecnico>(`${this.SRV}/tecnico/${id}`)
-      .pipe(retry(1), catchError(this.handleError));
+      .pipe( catchError(error =>{
+        return of(error.status)
+      }));
   }
   private handleError(error:any){
     return  throwError(

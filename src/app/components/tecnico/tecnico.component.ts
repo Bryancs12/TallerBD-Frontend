@@ -5,21 +5,52 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import {Tecnico} from "../../shared/models/tecnico.model";
+import {animate, state, style, transition, trigger} from "@angular/animations";
+import {Router} from "@angular/router";
+import {ImpresionService} from "../../shared/services/impresion.service";
 
 @Component({
   selector: 'app-tecnico',
   templateUrl: './tecnico.component.html',
-  styleUrls: ['./tecnico.component.css']
+  styleUrls: ['./tecnico.component.css'],
+  animations: [trigger('estadoFiltro',
+    [
+      state('show',
+        style({
+          'max-height' : '100%',
+          'opacity' : '1',
+          'visibility' : 'visible'
+        })),
+      state('hide',
+        style({
+          'max-height' : '0',
+          'opacity' : '0',
+          'visibility' : 'hidden'
+        })),
+      transition('show => hide', animate('600ms ease-in-out')),
+      transition('hide => show', animate('1000ms ease-in-out'))
+    ]
+  )]
 })
 export class TecnicoComponent implements OnInit{
   titulo: string = '';
   tecnicos = [new Tecnico()];
   filtro : any;
   frmTecnico : FormGroup;
+  pagActual = 1;
+  itemsPPag = 2;
+  numRegs = 0;
+  paginas = [2,5,10,20,50];
+  filtroVisible : boolean = false;
+  clave : string = 'idTecnico';
+  reversa : boolean = false;
+
   constructor(
     private srvTecnico: TecnicoService,
     private fb : FormBuilder,
-    private srvAuth : AuthService
+    private srvAuth : AuthService,
+    private router : Router,
+    private srvImpresion : ImpresionService
   ) {
     this.frmTecnico = this.fb.group({
       id: [''],
@@ -38,6 +69,37 @@ export class TecnicoComponent implements OnInit{
       correo: ['',[Validators.required, Validators.email]],
       direccion: ['',[Validators.required, Validators.minLength(5)]]
     });
+  }
+
+  onChangePag(e : any){
+    this.pagActual = e;
+    this.filtrar();
+  }
+
+  onChangeTama(e : any){
+    this.itemsPPag = e.target.value;
+    this.pagActual = 1;
+    this.filtrar();
+  }
+
+  get stateFiltro(){
+    return this.filtroVisible ? 'show' : 'hide'
+  }
+
+  onFilterChange(f: any){
+    this.filtro = f;
+    this.filtrar();
+
+  }
+
+  resetFilter(){
+    this.filtro = {
+      idTecnico : '',
+      nombre : '',
+      apellido1 : '',
+      apellido2 : ''
+    };
+    this.filtrar();
   }
 
 //Evento botones CRUD
@@ -75,6 +137,7 @@ export class TecnicoComponent implements OnInit{
         this.srvTecnico.eliminar(id)
           .subscribe({
             complete : () => {
+              this.filtrar();
               Swal.fire(
                 'Eliminado!',
                 'El archivo a sido eliminado',
@@ -168,29 +231,53 @@ export class TecnicoComponent implements OnInit{
 
   //Evento botones en general
   onFiltrar() {
-    alert('Filtrando');
+    this.filtroVisible = !this.filtroVisible;
+    if(!this.filtroVisible){
+      this.resetFilter();
+    }
   }
   onImprimir() {
-    alert('Imprimiendo');
+    const encabezado = ["Id", "Nombre","Celular", "Correo"]
+    /*const cuerpo = [
+      ["1111","Bryan","135","bryan@gmail.com"],
+      ["1111","Bryan","135","bryan@gmail.com"]
+    ];*/
+    this.srvTecnico.filtrar(this.filtro, 1, this.numRegs)
+      .subscribe(
+        data => {
+          const cuerpo = Object(data)['datos'].map(
+            (obj : any) => {
+              const datos = [
+                obj.idTecnico,
+                obj.nombre + ' ' + obj.apellido1 + ' ' + obj.apellido2,
+                obj.celular,
+                obj.correo
+              ]
+              return datos
+            }
+          )
+          this.srvImpresion.imprimir(encabezado,cuerpo, "Listado de Tecnicos", true)
+        }
+      )
   }
   onCerrar() {
-    alert('Cerrando');
+    this.router.navigate(['/home']);
   }
 
   private filtrar(): void{
-    this.srvTecnico.filtrar(this.filtro, 1, 10)
+    this.srvTecnico.filtrar(this.filtro, this.pagActual, this.itemsPPag)
       .subscribe(
         data => {
-          this.tecnicos = Object(data)
-          console.log(data)
+          this.tecnicos = Object(data)['datos'];
+          this.numRegs = Object(data)['cant'];
+
         }
       )
   }
 
   //
   ngOnInit() : void{
-    this.filtro = {idTecnico : '', nombre : '', apellido1 : '', apellido2 : ''};
-    this.filtrar();
+    this.resetFilter();
     console.log(this.srvAuth.valueUrsActual)
   }
 }

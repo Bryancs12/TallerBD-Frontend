@@ -22,6 +22,8 @@ import { ChangePasswComponent } from './components/change-passw/change-passw.com
 import {NgxPaginationModule} from "ngx-pagination";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import { OrderModule } from 'ngx-order-pipe';
+import { AdminComponent } from './components/admin/admin.component';
+import { OficinistaComponent } from './components/oficinista/oficinista.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { OrderModule } from 'ngx-order-pipe';
     TecnicoComponent,
     Error403Component,
     ChangePasswComponent,
+    AdminComponent,
+    OficinistaComponent,
   ],
   imports: [
     BrowserModule,

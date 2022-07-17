@@ -1,17 +1,16 @@
-<div class="container">
+<div class="container pt-4">
   <div class="card">
     <div class="card-header text-center">
-      <h4>Catálogo Tecnicos</h4>
+      <h4>Catálogo Administradores</h4>
     </div>
     <div class="card-body">
-
       <div class="container-fluid" [@estadoFiltro]="stateFiltro">
         <form>
           <div class="d-flex justify-content-center">
             <div class="d-flex">
-              <input type="text" class="form-control me-2" placeholder="Id Tecnico"
-                     #fIdCliente (keyup)="onFilterChange({
-                              idTecnico : fIdCliente.value,
+              <input type="text" class="form-control me-2" placeholder="Id Admin"
+                     #fIdAdmin (keyup)="onFilterChange({
+                              idAdmin : fIdAdmin.value,
                               nombre : fNombre.value,
                               apellido1 : fApellido1.value,
                               apellido2 : fApellido2.value
@@ -19,7 +18,7 @@
               >
               <input type="text" class="form-control me-2" placeholder="Nombre"
                      #fNombre (keyup)="onFilterChange({
-                              idTecnico : fIdCliente.value,
+                              idAdmin : fIdAdmin.value,
                               nombre : fNombre.value,
                               apellido1 : fApellido1.value,
                               apellido2 : fApellido2.value
@@ -27,7 +26,7 @@
               >
               <input type="text" class="form-control me-2" placeholder="Apellido 1"
                      #fApellido1 (keyup)="onFilterChange({
-                              idTecnico : fIdCliente.value,
+                              idAdmin : fIdAdmin.value,
                               nombre : fNombre.value,
                               apellido1 : fApellido1.value,
                               apellido2 : fApellido2.value
@@ -35,105 +34,117 @@
               >
               <input type="text" class="form-control me-3" placeholder="Apellido 2"
                      #fApellido2 (keyup)="onFilterChange({
-                              idTecnico : fIdCliente.value,
+                              idAdmin : fIdAdmin.value,
                               nombre : fNombre.value,
                               apellido1 : fApellido1.value,
                               apellido2 : fApellido2.value
                        })"
               >
             </div>
-            <button class="btn btn-danger" (click)="onFiltrar()">&times;</button>
+            <button class="btn btn-danger" (click)="onFilter()">&times;</button>
           </div>
         </form>
       </div>
-
-
-      <table class="table table-striped table-hover table-sm">
-        <thead>
-        <tr>
-          <th scope="col">Id</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Apellido 1</th>
-          <th scope="col">Apellido 2</th>
-          <th scope="col">Telefono</th>
-          <th scope="col">Celular</th>
-          <th scope="col">Correo</th>
-          <th [colSpan]="2" class="text-center">
-            <button class="btn btn-primary btn-sm"
-                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                    (click)="onNuevo();">
-              <fa-icon [icon]="['fas','plus']"></fa-icon>
-            </button>
-          </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let item of tecnicos
-                      | orderBy: clave : reversa : true
-                      | paginate: {
+      <div class="table-responsive">
+        <table class="table table-striped table-hover table-sm">
+          <thead>
+          <tr>
+            <th scope="col" (click)="onOrder('idAdmin')" class="orden"> Id
+              <fa-icon [icon]="['fas','sort-down']" *ngIf="reversa"></fa-icon>
+              <fa-icon [icon]="['fas','sort-up']" *ngIf="!reversa"></fa-icon>
+            </th>
+            <th scope="col" (click)="onOrder('nombre')" class="orden">Nombre
+              <fa-icon [icon]="['fas','sort-down']" *ngIf="reversa"></fa-icon>
+              <fa-icon [icon]="['fas','sort-up']" *ngIf="!reversa"></fa-icon>
+            </th>
+            <th scope="col" (click)="onOrder('apellido1')" class="orden">Apellido 1
+              <fa-icon [icon]="['fas','sort-down']" *ngIf="reversa"></fa-icon>
+              <fa-icon [icon]="['fas','sort-up']" *ngIf="!reversa"></fa-icon>
+            </th>
+            <th scope="col" (click)="onOrder('apellido2')" class="orden">Apellido 2
+              <fa-icon [icon]="['fas','sort-down']" *ngIf="reversa"></fa-icon>
+              <fa-icon [icon]="['fas','sort-up']" *ngIf="!reversa"></fa-icon>
+            </th>
+            <th scope="col">Telefono</th>
+            <th scope="col">Celular</th>
+            <th scope="col">Correo</th>
+            <th [colSpan]="2" class="text-center">
+              <button class="btn btn-primary btn-sm"
+                      data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                      (click)="onNew();">
+                <fa-icon [icon]="['fas','plus']"></fa-icon>
+              </button>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let item of admins
+                  | orderBy: clave : reversa : true
+                  | paginate: {
                       itemsPerPage: itemsPPag,
                       currentPage: pagActual,
-                      totalItems: numRegs }
-                ">
-          <th scope="row">{{item.idTecnico}}</th>
-          <td>{{item.nombre}}</td>
-          <td>{{item.apellido1}}</td>
-          <td>{{item.apellido2}}</td>
-          <td>{{item.telefono}}</td>
-          <td>{{item.celular}}</td>
-          <td>{{item.correo}}</td>
-          <td class="text-center">
-            <button class="btn btn-sm btn-warning"
-                    data-bs-toggle="modal" data-bs-target="#staticBackdrop"
-                    (click)="onEditar(item.id);">
-              <fa-icon [icon]="['fas','pencil']"></fa-icon>
-            </button>
-          </td>
-          <td class="text-center">
-            <button class="btn btn-sm btn-danger"
-                    (click)="onEliminar(item.id, item.nombre+' '+item.apellido1+' '+item.apellido2);">
-              <fa-icon [icon]="['fas','trash-can']"></fa-icon>
-            </button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="card-footer d-flex justify-content-between pt-4">
-      <div class="d-flex">
-        <div class="selector me-3">
-          <select class="form-select" (change)="onChangeTama($event)">
-            <option *ngFor="let tama of paginas" [ngValue]="tama" [selected]="tama===itemsPPag">
-              {{tama}}
-            </option>
-          </select>
-          <!--              <option value="2">2</option>-->
-          <!--              <option value="5">5</option>-->
-          <!--              <option value="10">10</option>-->
-          <!--              <option value="15">15</option>-->
-        </div>
-
-        <pagination-controls
-          (pageChange)="onChangePag($event)"
-          previousLabel=""
-          nextLabel=""
-        >
-        </pagination-controls>
+                      totalItems: numRegs }">
+            <th scope="row">{{item.idAdmin}}</th>
+            <td>{{item.nombre}}</td>
+            <td>{{item.apellido1}}</td>
+            <td>{{item.apellido2}}</td>
+            <td>{{item.telefono}}</td>
+            <td>{{item.celular}}</td>
+            <td>{{item.correo}}</td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-warning"
+                      data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                      (click)="onEdit(item.id);">
+                <fa-icon [icon]="['fas','pencil']"></fa-icon>
+              </button>
+            </td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-danger"
+                      (click)="onDelete(item.id, item.nombre+' '+item.apellido1+' '+item.apellido2);">
+                <fa-icon [icon]="['fas','trash-can']"></fa-icon>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
+      <div class="card-footer d-flex justify-content-between pt-4">
+        <div class="d-flex">
+          <div class="selector me-3">
+            <select class="form-select" (change)="onChangeTama($event)">
+              <option *ngFor="let tama of paginas" [ngValue]="tama" [selected]="tama===itemsPPag">
+                {{tama}}
+              </option>
+            </select>
+            <!--              <option value="2">2</option>-->
+            <!--              <option value="5">5</option>-->
+            <!--              <option value="10">10</option>-->
+            <!--              <option value="15">15</option>-->
+          </div>
+
+          <pagination-controls
+            (pageChange)="onChangePag($event)"
+            previousLabel=""
+            nextLabel=""
+          >
+          </pagination-controls>
+        </div>
+      </div>
+
     </div>
     <div class="card-footer text-end">
       <div>
-        <button class="btn btn-sm btn-outline-primary me-2"(click)="onFiltrar();">
+        <button class="btn btn-sm btn-outline-primary me-2"(click)="onFilter();">
           <fa-icon [icon]="['fas','filter']"></fa-icon>
           Filtrar
         </button>
         <button class="btn btn-sm btn-outline-success me-2"
-                (click)="onImprimir();">
+                (click)="onPrint();">
           <fa-icon [icon]="['fas','print']"></fa-icon>
           Imprimir
         </button>
         <button class="btn btn-sm btn-outline-danger"
-                (click)="onCerrar();">
+                (click)="onClose();">
           <fa-icon [icon]="['fas','power-off']"></fa-icon>
           Cerrar
         </button>
@@ -150,14 +161,14 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <form id="frmTecnico" [formGroup]="frmTecnico" (ngSubmit)="onGuardar();">
+          <form id="frmAdmin" [formGroup]="frmAdmin" (ngSubmit)="onSave();">
             <div class="row mb-1">
-              <label for="idTecnico" class="col-sm-3 col-form-label">Id Tecnico</label>
+              <label for="idAdmin" class="col-sm-3 col-form-label">Id Admin</label>
               <div class="col-sm-9">
-                <input type="text" formControlName="idTecnico" class="form-control" id="idTecnico" placeholder="Id Tecnico">
-                <div class="alert alert-danger" *ngIf="E['idTecnico'].invalid && E['idTecnico'].touched">
-                  <div *ngIf="E['idTecnico'].errors!['required']">El id Tecnico es obligatorio</div>
-                  <div *ngIf="E['idTecnico'].errors!['maxlength']">El id debe tener 15 caracteres maximo</div>
+                <input type="text" formControlName="idAdmin" class="form-control" id="idAdmin" placeholder="Id Admin">
+                <div class="alert alert-danger" *ngIf="E['idAdmin'].invalid && E['idAdmin'].touched">
+                  <div *ngIf="E['idAdmin'].errors!['required']">El id Admin es obligatorio</div>
+                  <div *ngIf="E['idAdmin'].errors!['maxlength']">El id debe tener 15 caracteres maximo</div>
                 </div>
               </div>
             </div>
@@ -197,26 +208,17 @@
                 </div>
               </div>
             </div>
+
             <div class="row mb-1">
               <label for="telefono" class="col-sm-3 col-form-label">Telefono</label>
               <div class="col-sm-9">
-                <div class="row">
-                  <div class="col-sm-6">
-                    <input type="tel" formControlName="telefono" class="form-control" id="telefono" placeholder="Telefono">
-                    <div class="alert alert-danger" *ngIf="E['telefono'].invalid && E['telefono'].touched">
-                      <div *ngIf="E['telefono'].errors!['pattern']">Debe contener 8 numeros y caracter - en medio</div>
-                    </div>
-                  </div>
-                  <div class="col-sm-6">
-                    <input type="tel" formControlName="celular" class="form-control" id="celular" placeholder="Celular">
-                    <div class="alert alert-danger" *ngIf="E['celular'].invalid && E['celular'].touched">
-                      <div *ngIf="E['celular'].errors!['required']">Celular es obligatorio</div>
-                      <div *ngIf="E['celular'].errors!['pattern']">Debe contener 8 numeros y caracter - en medio</div>
-                    </div>
-                  </div>
+                <input type="tel" formControlName="telefono" class="form-control" id="telefono" placeholder="Telefono">
+                <div class="alert alert-danger" *ngIf="E['telefono'].invalid && E['telefono'].touched">
+                  <div *ngIf="E['telefono'].errors!['pattern']">Debe contener 8 numeros y caracter - en medio</div>
                 </div>
               </div>
             </div>
+
             <div class="row mb-1">
               <label for="correo" class="col-sm-3 col-form-label">Correo</label>
               <div class="col-sm-9">
@@ -226,20 +228,13 @@
                 </div>
               </div>
             </div>
-            <div class="row">
-              <label for="direccion" class="col-sm-3 col-form-label">Direccion</label>
-              <div class="col-sm-9">
-                <textarea id="direccion" formControlName="direccion" class="form-control" placeholder="Direccion"></textarea>
-                <div class="alert alert-danger" *ngIf="E['direccion'].invalid && E['direccion'].touched">
-                  <div *ngIf="E['direccion'].errors!['required']">Direccion es obligatorio</div>
-                </div>
-              </div>
-            </div>
+
+
           </form>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-outline-primary" form="frmTecnico"
-                  [disabled]="frmTecnico.invalid">
+          <button type="submit" class="btn btn-outline-primary" form="frmAdmin"
+                  [disabled]="frmAdmin.invalid">
             <fa-icon [icon]="['fas','save']"></fa-icon>
             Guardar
           </button>

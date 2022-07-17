@@ -10,6 +10,8 @@ import {TecnicoComponent} from "./components/tecnico/tecnico.component";
 import {Role} from "./shared/models/role.model";
 import {Error403Component} from "./components/error403/error403.component";
 import {ChangePasswComponent} from "./components/change-passw/change-passw.component";
+import {AdminComponent} from "./components/admin/admin.component";
+import {OficinistaComponent} from "./components/oficinista/oficinista.component";
 
 
 const routes: Routes = [
@@ -38,6 +40,12 @@ const routes: Routes = [
   },
   {
     path : 'passw', component: ChangePasswComponent, canActivate : [AuthGuard]
+  },
+  {
+    path : 'admin', component: AdminComponent, canActivate : [AuthGuard]
+  },
+  {
+    path : 'oficinista', component: OficinistaComponent, canActivate : [AuthGuard]
   },
 ];
 
